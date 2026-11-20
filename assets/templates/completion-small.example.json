@@ -1,0 +1,89 @@
+{
+  "work_item": "TASK-1",
+  "revision": 1,
+  "ledger_level": "root",
+  "tier": "small",
+  "owner": "sdlc-orchestrator",
+  "artifact_revision": "REPLACE_WITH_EXACT_GIT_HEAD",
+  "final_claim": "IN_PROGRESS",
+  "requirements": [
+    {
+      "id": "R-ROOT",
+      "outcome": "All local tasks and dependencies reconciled",
+      "gate_ids": [
+        "ROOT-TRACK"
+      ]
+    },
+    {
+      "id": "AC-1",
+      "outcome": "Observed change fulfills original requirement",
+      "gate_ids": [
+        "G-AC-1"
+      ]
+    }
+  ],
+  "gates": [
+    {
+      "id": "ROOT-TRACK",
+      "requirement": "R-ROOT",
+      "owner": "sdlc-orchestrator",
+      "required": true,
+      "kind": "manual",
+      "check": "manual: reconcile tracker and work items",
+      "expect": "Scoped task acceptance/dependencies reconciled; unrelated work tracked separately",
+      "status": "PENDING",
+      "self_check": {
+        "result": "NOT_RUN",
+        "reference": "",
+        "observed": "",
+        "scope_revision": null,
+        "artifact_revision": null,
+        "context_id": ""
+      },
+      "parent_check": {
+        "result": "NOT_RUN",
+        "reference": "",
+        "observed": "",
+        "scope_revision": null,
+        "artifact_revision": null,
+        "context_id": "",
+        "mode": "not-run",
+        "verifier": ""
+      }
+    },
+    {
+      "id": "G-AC-1",
+      "requirement": "AC-1",
+      "owner": "sdlc-orchestrator",
+      "required": true,
+      "kind": "command",
+      "check": "command: execute approved UNIT gate",
+      "expect": "Targeted regression test passes",
+      "status": "PENDING",
+      "self_check": {
+        "result": "NOT_RUN",
+        "reference": "",
+        "observed": "",
+        "scope_revision": null,
+        "artifact_revision": null,
+        "context_id": ""
+      },
+      "parent_check": {
+        "result": "NOT_RUN",
+        "reference": "",
+        "observed": "",
+        "scope_revision": null,
+        "artifact_revision": null,
+        "context_id": "",
+        "mode": "not-run",
+        "verifier": ""
+      },
+      "execution_gate_id": "UNIT"
+    }
+  ],
+  "approvals": {
+    "required": false,
+    "granted": false,
+    "reference": ""
+  }
+}

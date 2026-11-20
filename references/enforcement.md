@@ -1,0 +1,37 @@
+# Independent executable gates, evidence provenance and merge protection
+
+**Read before claiming gates are technically enforced.** Agent instructions and local JSON audits cannot independently attest an execution. The portable gate runner enforces an explicitly pinned policy and gathers actual command results; it becomes a trust boundary only if executed by a separate, restricted identity with protected policy and evidence storage.
+
+## Approved gate execution
+
+- Author a reviewed `assets/templates/approved-gates.json`-style policy in a protected location. Each check has a stable ID, literal argv array, expected exit code, timeout (bounded) and optional required stdout substring. The runner uses `subprocess` without shell invocation, no path interpolation and a minimal environment. Commands can still execute dangerous code; do not run untrusted gates without a container/sandbox, network restrictions and limited permissions.
+- Pin the **whole policy SHA-256** at invocation (`--policy-sha256`) so agents cannot quietly modify it. `--allow-run` is an explicit local execution acknowledgement, *not human identity verification*.
+- Execute after committing the target revision. By default the runner requires a clean Git working tree and records the actual HEAD, policy hash, each check's result, timestamp, and output digests. It fails closed for missing checks, timeouts, unexpected output and nonzero exits.
+- For authenticated evidence, sign the receipt with a key that the coding agent **cannot read or invoke**. The runner requires `--assert-executor-isolation` when a signing key is supplied; this is an operator assertion, **not a verified isolation guarantee**. Tests running as the same OS user may read a `chmod 600` key even if the key file lives outside the repository. Use distinct identities/containers and protected signer access. The HMAC mode is suitable for a separately controlled service; a key stored in an agent-accessible repository or shared user session provides no security. Recheck receipts against the expected policy and commit and current clean repository state, not just a `PASS` field. Unsigned receipts are **local observations only**.
+- For an actual **task state mutation**, run `scripts/verify_and_close.py`. The state store blocks direct `transition --state Done`; the guarded closer takes an SQLite `BEGIN IMMEDIATE` lock, checks the current expected version, projects a single `Verified` task into Done, evaluates the existing completion decision against that scoped snapshot, rechecks evidence files and Git HEAD, then writes one journaled Done transition and commits. A failed check rolls back. An unrestricted agent can still bypass this local control by changing code/SQLite directly; externally protected CI is required for enforceable security.
+- Run `scripts/completion_decision.py` as the **single read-only final decision** instead of independently interpreting the legacy JSON task audit. It reads SQLite state without writing it, replays task events, validates all required root and supplied leaf ledgers, cross-checks task acceptance IDs, enforces risk tier and reviewer rules, verifies the exact policy/commit/receipt, and requires the tracker and each required command gate to reference the receipt digest `receipt-sha256:<SHA256-of-exact-receipt-bytes>`. Each required command gate must set `execution_gate_id` to a gate ID in the pinned policy mandatory set. An unrelated or old test log does not qualify.
+
+**Decision modes:** `--mode lightweight` is available ONLY for genuinely small work; it checks SQLite, requirement coverage and ledger structure without opening or authenticating a receipt and returns `LIGHTWEIGHT_DECLARED`, never an independently verified or executable PASS. `--mode local` returns `LOCAL_CONSISTENT` (advisory and explicitly unauthenticated) or `REJECTED`. `--mode signed --key-file ...` verifies the HMAC and can return `SIGNED_RECEIPT_MATCH`, but this is **not** independent proof of isolation, review authenticity or deployment. Standard/high-risk work cannot use lightweight mode. High-risk full completion requires signed mode and actual protected execution + human authorization where applicable. Keep signing keys outside agent control. A read-only verifier cannot prevent an untrusted agent from skipping it; protected CI must make it mandatory.
+
+Example after creating a reviewed gate policy, running `gate_runner.py run`, transitioning the task to Verified with the matching receipt SHA-256, and preparing a **task-scoped** COMPLETE root ledger (root `work_item` must equal `TASK-1`):
+
+```bash
+python scripts/verify_and_close.py \
+  --db docs/sdlc/state.db --task-id TASK-1 --expected-version 3 \
+  --actor sdlc-orchestrator --root-ledger docs/sdlc/task-1-root.json \
+  --repo . --expected-commit "$(git rev-parse HEAD)" \
+  --policy /trusted/approved-gates.json --policy-sha256 "$APPROVED_POLICY_SHA256" \
+  --receipt /trusted/receipts/gates.json --mode local
+```
+
+For a read-only final project check use `scripts/completion_decision.py` (or `--task-id` for one already closed task). For signed mode supply `--mode signed --key-file /trusted/secret/key` to an **independently controlled** verifier, not a coding agent. Supply `--leaf-ledger <path>` once per real leaf ledger. No leaf ledgers are needed for a genuine small single-owner task; the root ledger must still cover all acceptance IDs. Start from `assets/templates/completion-small.example.json` for a genuinely small single-owner task: replace all placeholders with observed facts, add requirement IDs and gates as needed, record passing self/parent checks at the exact scope and Git revisions, and set `final_claim=COMPLETE` only after all checks have actually passed. Standard/high-risk use all mandated root gates (`assets/templates/assurance-root.json`), and retain actual leaf ledgers for dispatched tasks. Generated `TASKS.md` is a human view, never the input of the final verifier. `task_tracker_audit.py` is legacy JSON-only and must not decide SQLite completion.
+
+## External merge and release control
+
+- Copy and review the supplied GitHub Actions template, configure an appropriately protected policy file and runner secrets, and pin action versions to approved revisions in a real deployment. Configure required status checks, review/owner rules and rulesets/branch protection *outside* this Skill. Avoid bypass permissions for coding agents.
+- Treat release as distinct from merge. Production deployment needs authorized environment approval, migration/rollback checks and the release evidence for the exact deploy revision. Do not claim external CI/CD protection exists because a template is included.
+- Other hosts (GitLab, Bitbucket, local CI, Codex, Antigravity, OpenCode) can call the same portable runner, but the security boundary must be established in that host. Native agent hooks are advisory and bypassable unless host enforcement prevents bypass.
+
+## Fail-closed and adversarial verification
+
+The runner/verification must reject: wrong commit, dirty working tree (for final claims), missing/renamed mandatory gates, modified policy, failed/timeout check, corrupted signature, changed output digest, insufficient key isolation, wrong signed receipt scope, and unverified manual approvals. A signed receipt proves the signer produced a record, **not** that its tests were well-designed or sufficient to validate business behavior.

@@ -1,0 +1,256 @@
+{
+  "work_item": "REPLACE-WITH-REAL-ID",
+  "ledger_level": "root",
+  "revision": 1,
+  "artifact_revision": "REPLACE-WITH-REAL-ARTIFACT-REVISION",
+  "tier": "standard",
+  "owner": "sdlc-orchestrator",
+  "requirements": [
+    {
+      "id": "R-ROOT-ASSURANCE",
+      "outcome": "Only reporting and release assurance; add EVERY user requirement and its own acceptance gates before marking complete",
+      "gate_ids": [
+        "ROOT-TRACK",
+        "ROOT-REQ",
+        "ROOT-DISP",
+        "ROOT-LEAF",
+        "ROOT-INT",
+        "ROOT-SIMP",
+        "ROOT-RISK",
+        "ROOT-CLAIM"
+      ]
+    }
+  ],
+  "gates": [
+    {
+      "id": "ROOT-TRACK",
+      "requirement": "R-ROOT-ASSURANCE",
+      "owner": "sdlc-orchestrator",
+      "required": true,
+      "kind": "manual",
+      "check": "manual: inspect canonical tracker tasks, ownership, updates, blockers, dependencies and closure evidence",
+      "expect": "All assigned and director-owned work is represented, current, and reconciled with acceptance gates; no unverified Done or fake remote sync",
+      "status": "PENDING",
+      "self_check": {
+        "result": "NOT_RUN",
+        "reference": "",
+        "observed": "",
+        "scope_revision": null,
+        "artifact_revision": null,
+        "context_id": ""
+      },
+      "parent_check": {
+        "result": "NOT_RUN",
+        "reference": "",
+        "observed": "",
+        "scope_revision": null,
+        "artifact_revision": null,
+        "context_id": "",
+        "mode": "not-run",
+        "verifier": ""
+      }
+    },
+    {
+      "id": "ROOT-REQ",
+      "requirement": "R-ROOT-ASSURANCE",
+      "owner": "sdlc-orchestrator",
+      "required": true,
+      "kind": "manual",
+      "check": "manual: cross-check every original and amended user requirement against the requirement inventory",
+      "expect": "No omitted or silently reduced requirements; add all real requirements before final",
+      "status": "PENDING",
+      "self_check": {
+        "result": "NOT_RUN",
+        "reference": "",
+        "observed": "",
+        "scope_revision": null,
+        "artifact_revision": null,
+        "context_id": ""
+      },
+      "parent_check": {
+        "result": "NOT_RUN",
+        "reference": "",
+        "observed": "",
+        "scope_revision": null,
+        "artifact_revision": null,
+        "context_id": "",
+        "mode": "not-run",
+        "verifier": ""
+      }
+    },
+    {
+      "id": "ROOT-DISP",
+      "requirement": "R-ROOT-ASSURANCE",
+      "owner": "sdlc-orchestrator",
+      "required": true,
+      "kind": "manual",
+      "check": "manual: inspect actual dispatch handles and handoff boundaries",
+      "expect": "Only authorized, correctly scoped delegates used or explicitly not run",
+      "status": "PENDING",
+      "self_check": {
+        "result": "NOT_RUN",
+        "reference": "",
+        "observed": "",
+        "scope_revision": null,
+        "artifact_revision": null,
+        "context_id": ""
+      },
+      "parent_check": {
+        "result": "NOT_RUN",
+        "reference": "",
+        "observed": "",
+        "scope_revision": null,
+        "artifact_revision": null,
+        "context_id": "",
+        "mode": "not-run",
+        "verifier": ""
+      }
+    },
+    {
+      "id": "ROOT-LEAF",
+      "requirement": "R-ROOT-ASSURANCE",
+      "owner": "sdlc-orchestrator",
+      "required": true,
+      "kind": "manual",
+      "check": "manual: audit child self-evidence and parent rechecks",
+      "expect": "Every relevant child gate verified or explicit gap recorded",
+      "status": "PENDING",
+      "self_check": {
+        "result": "NOT_RUN",
+        "reference": "",
+        "observed": "",
+        "scope_revision": null,
+        "artifact_revision": null,
+        "context_id": ""
+      },
+      "parent_check": {
+        "result": "NOT_RUN",
+        "reference": "",
+        "observed": "",
+        "scope_revision": null,
+        "artifact_revision": null,
+        "context_id": "",
+        "mode": "not-run",
+        "verifier": ""
+      }
+    },
+    {
+      "id": "ROOT-INT",
+      "requirement": "R-ROOT-ASSURANCE",
+      "owner": "sdlc-orchestrator",
+      "required": true,
+      "kind": "manual",
+      "check": "manual: inspect real end-to-end and adversarial integration evidence",
+      "expect": "All required integrated user journeys meet acceptance",
+      "status": "PENDING",
+      "self_check": {
+        "result": "NOT_RUN",
+        "reference": "",
+        "observed": "",
+        "scope_revision": null,
+        "artifact_revision": null,
+        "context_id": ""
+      },
+      "parent_check": {
+        "result": "NOT_RUN",
+        "reference": "",
+        "observed": "",
+        "scope_revision": null,
+        "artifact_revision": null,
+        "context_id": "",
+        "mode": "not-run",
+        "verifier": ""
+      }
+    },
+    {
+      "id": "ROOT-SIMP",
+      "requirement": "R-ROOT-ASSURANCE",
+      "owner": "sdlc-orchestrator",
+      "required": true,
+      "kind": "manual",
+      "check": "manual: assess existing-code reuse, material architecture/implementation complexity and reviewer G2S evidence",
+      "expect": "No demonstrably avoidable material complexity or unsafe underengineering; constraints and necessary complexity justified",
+      "status": "PENDING",
+      "self_check": {
+        "result": "NOT_RUN",
+        "reference": "",
+        "observed": "",
+        "scope_revision": null,
+        "artifact_revision": null,
+        "context_id": ""
+      },
+      "parent_check": {
+        "result": "NOT_RUN",
+        "reference": "",
+        "observed": "",
+        "scope_revision": null,
+        "artifact_revision": null,
+        "context_id": "",
+        "mode": "not-run",
+        "verifier": ""
+      }
+    },
+    {
+      "id": "ROOT-RISK",
+      "requirement": "R-ROOT-ASSURANCE",
+      "owner": "sdlc-orchestrator",
+      "required": true,
+      "kind": "manual",
+      "check": "manual: inspect risk/approval/release evidence",
+      "expect": "All required security, reliability, safety and human approval constraints satisfied",
+      "status": "PENDING",
+      "self_check": {
+        "result": "NOT_RUN",
+        "reference": "",
+        "observed": "",
+        "scope_revision": null,
+        "artifact_revision": null,
+        "context_id": ""
+      },
+      "parent_check": {
+        "result": "NOT_RUN",
+        "reference": "",
+        "observed": "",
+        "scope_revision": null,
+        "artifact_revision": null,
+        "context_id": "",
+        "mode": "not-run",
+        "verifier": ""
+      }
+    },
+    {
+      "id": "ROOT-CLAIM",
+      "requirement": "R-ROOT-ASSURANCE",
+      "owner": "sdlc-orchestrator",
+      "required": true,
+      "kind": "manual",
+      "check": "manual: compare final narrative against current run logs and original scope",
+      "expect": "No unverified completion, test, review or production claims",
+      "status": "PENDING",
+      "self_check": {
+        "result": "NOT_RUN",
+        "reference": "",
+        "observed": "",
+        "scope_revision": null,
+        "artifact_revision": null,
+        "context_id": ""
+      },
+      "parent_check": {
+        "result": "NOT_RUN",
+        "reference": "",
+        "observed": "",
+        "scope_revision": null,
+        "artifact_revision": null,
+        "context_id": "",
+        "mode": "not-run",
+        "verifier": ""
+      }
+    }
+  ],
+  "approvals": {
+    "required": false,
+    "granted": false,
+    "reference": ""
+  },
+  "final_claim": "IN_PROGRESS"
+}

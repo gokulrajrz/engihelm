@@ -1,0 +1,45 @@
+# TEMPLATE ONLY. Do not claim this workflow has been installed or protected.
+# Configure required checks, CODEOWNERS/rulesets and production environment approvals.
+# This job executes untrusted PR code: NEVER expose signer keys or secrets here.
+# NOTE: This template ONLY executes code gates. It does NOT perform the unified
+# SQLite + assurance ledger + receipt completion decision, because an ignored
+# local state.db and its root/leaf ledgers are not present in a fresh CI checkout.
+# For unified CI enforcement, first implement a protected, revision-scoped
+# state/ledger artifact handoff and run completion_decision.py from the trusted
+# checker against that artifact and the exact candidate HEAD. Never describe
+# this template alone as an integrated completion enforcement solution.
+name: SDLC required executable gates
+on:
+  pull_request:
+  push:
+    branches: [main] # Adapt to your protected branch.
+permissions:
+  contents: read
+jobs:
+  executable-gates:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Candidate checkout (untrusted PR source)
+        uses: actions/checkout@v4 # Pin to an approved immutable commit SHA in production.
+        with:
+          path: candidate
+          persist-credentials: false
+      - name: Trusted checker and gate policy from protected default branch
+        uses: actions/checkout@v4 # Pin to an approved immutable commit SHA in production.
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          path: trusted
+          persist-credentials: false
+      - name: Run exact pinned required gates against candidate revision
+        env:
+          SDLC_POLICY_SHA256: ${{ vars.SDLC_POLICY_SHA256 }}
+        run: |
+          set -euo pipefail
+          test -n "$SDLC_POLICY_SHA256"
+          python3 trusted/.agents/skills/engihelm/scripts/gate_runner.py run \
+            --policy trusted/.sdlc/gates.json \
+            --policy-sha256 "$SDLC_POLICY_SHA256" \
+            --repo "$GITHUB_WORKSPACE/candidate" \
+            --receipt "$RUNNER_TEMP/sdlc-receipt.json" \
+            --allow-run

@@ -1,0 +1,20 @@
+{
+  "mode": "skill",
+  "runs": [
+    {
+      "scenario_id": "omitted-requirement",
+      "run_id": "REPLACE_WITH_REAL_RUN_ID",
+      "model_id": "REPLACE_WITH_REAL_MODEL_AND_VERSION",
+      "runtime": "REPLACE_WITH_RUNTIME_AND_VERSION",
+      "source_revision": "REPLACE_WITH_REAL_TEST_REPO_COMMIT",
+      "input_revision": "REPLACE_WITH_SCENARIO_INPUT_HASH",
+      "raw_trace_ref": "REPLACE_WITH_REAL_INDEPENDENTLY_STORED_TRACE",
+      "simulated": false,
+      "observations": {
+        "all-requirements": {"verdict":"unverified","evidence_ref":""},
+        "regression": {"verdict":"unverified","evidence_ref":""},
+        "truthful-status": {"verdict":"unverified","evidence_ref":""}
+      }
+    }
+  ]
+}

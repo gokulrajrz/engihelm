@@ -1,0 +1,24 @@
+# Local credentials and host configuration
+/.aws/
+/.codex/
+/.agents/
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Python caches and local environments
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+
+# Local runtime state and generated output
+/docs/sdlc/
+/dist/
+/build/
+*.egg-info/
+.DS_Store
+Thumbs.db

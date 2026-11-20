@@ -1,0 +1,53 @@
+{
+  "work_item": "EXAMPLE-1",
+  "revision": 1,
+  "tier": "standard",
+  "owner": "backend-engineer",
+  "requirements": [
+    {
+      "id": "R-1",
+      "outcome": "Observable example outcome",
+      "gate_ids": [
+        "LEAF-A1"
+      ]
+    }
+  ],
+  "gates": [
+    {
+      "id": "LEAF-A1",
+      "requirement": "R-1",
+      "owner": "backend-engineer",
+      "required": true,
+      "kind": "command",
+      "check": "<inspect and approve exact command before running>",
+      "expect": "<observable expected result>",
+      "status": "PENDING",
+      "self_check": {
+        "result": "NOT_RUN",
+        "reference": "",
+        "observed": "",
+        "scope_revision": null,
+        "artifact_revision": null,
+        "context_id": "builder-ctx"
+      },
+      "parent_check": {
+        "result": "NOT_RUN",
+        "reference": "",
+        "observed": "",
+        "scope_revision": null,
+        "mode": "same-context",
+        "verifier": "",
+        "artifact_revision": null,
+        "context_id": "reviewer-ctx"
+      }
+    }
+  ],
+  "approvals": {
+    "required": false,
+    "granted": false,
+    "reference": ""
+  },
+  "final_claim": "IN_PROGRESS",
+  "ledger_level": "leaf",
+  "artifact_revision": "EXAMPLE-ARTIFACT-REV-1"
+}

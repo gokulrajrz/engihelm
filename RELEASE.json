@@ -1,0 +1,14 @@
+{
+  "name": "engihelm",
+  "display_name": "EngiHelm",
+  "version": "1.0.0",
+  "release_date": "2026-11-20",
+  "edition": "Unified Assurance and Safe Migration",
+  "license": "private-no-public-license",
+  "compatibility": {
+    "previous_skill_name": "agile-sdlc-orchestrator",
+    "historical_actor_id": "sdlc-orchestrator",
+    "tracker_path": "docs/sdlc/state.db"
+  },
+  "validation_scope": "local tests and bundle integrity; not live agent trials or protected production enforcement"
+}

@@ -1,0 +1,14 @@
+EngiHelm — License status (private distribution)
+
+No public license or permission for redistribution is granted by this package.
+Rights to the original EngiHelm content remain with the applicable rightsholder(s).
+The rightsholder may use and modify the work and may separately authorize others.
+
+Before public distribution, obtain the rightsholder's explicit decision on an
+open-source or proprietary license and replace this notice with its actual terms.
+Do not assume the presence of this file constitutes an MIT, Apache, or other
+open-source license.
+
+This notice does not change the independent license obligations of third-party
+projects referenced by EngiHelm. EngiHelm references patterns from Ponytail
+and Unlazy; it does not include copies of their source files.

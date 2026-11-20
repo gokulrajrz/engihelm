@@ -1,0 +1,13 @@
+{
+  "budget_usd": 2.0,
+  "max_parallel": 2,
+  "models": [
+    {"id": "replace-with-your-light-model", "tier": "light", "context_tokens": 32000, "usd_per_1m_input": 0.5, "usd_per_1m_output": 1.5},
+    {"id": "replace-with-your-balanced-model", "tier": "balanced", "context_tokens": 64000, "usd_per_1m_input": 1.0, "usd_per_1m_output": 4.0},
+    {"id": "replace-with-your-deep-model", "tier": "deep", "context_tokens": 128000, "usd_per_1m_input": 5.0, "usd_per_1m_output": 20.0}
+  ],
+  "tasks": [
+    {"id": "TASK-001", "risk": "standard", "complexity": "balanced", "input_tokens": 6000, "output_tokens": 2000}
+  ],
+  "note": "These are fictional models and illustrative costs. Replace with actually available models and current prices."
+}

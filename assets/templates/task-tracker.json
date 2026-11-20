@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "tracker_id": "LOCAL-EXAMPLE",
+  "source_of_truth": "local",
+  "revision": 1,
+  "items": [
+    {
+      "id": "LOCAL-1",
+      "title": "Describe a concrete user outcome",
+      "type": "task",
+      "risk": "small",
+      "priority": "normal",
+      "state": "Ready",
+      "owner": "backend-engineer",
+      "acceptance_ids": ["R-1"],
+      "dependencies": [],
+      "blocked": false,
+      "blocker": null,
+      "next_action": "Confirm scope and implement the change",
+      "gate_ledger_ref": "docs/sdlc/work-items/LOCAL-1/assurance.json",
+      "scope_revision": 1,
+      "artifact_revision": "NOT-YET-IMPLEMENTED",
+      "evidence_refs": [],
+      "reviewer": "qa-engineer",
+      "closure": null,
+      "last_update": {
+        "actor": "sdlc-orchestrator",
+        "at": "2026-01-01T00:00:00Z",
+        "note": "Example only: replace before actual use"
+      }
+    }
+  ]
+}

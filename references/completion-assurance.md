@@ -1,0 +1,59 @@
+# Universal completion assurance: binding rules for ALL agents
+
+Apply to the principal orchestrator **and every activated specialist**, including PO/BA/UX/Scrum Master/writer. These are process invariants, not a separate reviewer role and not an optional end-of-task audit. Inspired by the verifiable completion discipline of Leonxlnx/unlazy (MIT): https://github.com/Leonxlnx/unlazy. This skill does not vendor Unlazy's scripts or pretend its native Stop hook works everywhere.
+
+## The absolute contract
+
+1. **Before work, enumerate acceptance:** Read the user's original request and latest amendments. Assign stable IDs to independently omittable outcomes, hard constraints, negative cases and applicable authorization gates. Version the inventory; amendments increment revision and reopen affected gates. Never silently reduce scope.
+2. **Write gates before execution:** Every agent, including the orchestrator, owns observable, falsifiable gates for its assigned deliverable. For executable verification, record `CHECK` (exact command, environment, working directory) and `EXPECT` (exit/result/observable contract); for manual work, record the artifact, expected properties and a concrete review method. No vague gate such as 'looks good'. A quick one-gate checklist is sufficient for trivial tasks; multiple leaf/branch ledgers are mandatory for substantial split work.
+3. **Decompose intelligently:** For standard/high-risk, use a *Depth Tree* only to natural independent deliverables; do not force a particular depth or treat extra tokens as success. Each leaf states `Owns`, `Needs`, `Owner`, `Tier`, `Acceptance`, `Gates`, and next integration point. Each parent/branch owns integration and requirement-coverage gates. One owner per file/contract; leases/ownership conventions are coordination, **not** a security or filesystem boundary.
+4. **Self-check then return:** After producing work, each specialist executes authorized runnable checks and manually inspects other gates, records exact pass/fail/blocked/not-run proof and revision. A specialist may say `SELF_VERIFIED` but may not self-award `INDEPENDENTLY_VERIFIED`. Return unverified/failed gates and repair proposals, never a blanket 'done'. Include negative, boundary and false-positive probes proportional to risk.
+5. **Parent re-verifies:** The orchestrator inspects changed artifacts, re-runs executable gates in the applicable environment (after reviewing/authorizing commands) and assesses manual evidence. Previously reported green results are **not** re-verification. Distinguish rerun of a command from independently designed or independently executed review. In single-agent mode label this a *same-context second pass*, never independent. For `small` work, a documented same-context recheck is sufficient when no additional material risk exists. For `standard` work require a genuinely distinct reviewer for local Done and leave the task incomplete if one is unavailable. For `high-risk` work require genuinely separate independent reviewer/verification for an independently verified completion claim; if unavailable, remain blocked/partially verified and disclose the limitation.
+6. **Integrate branches, not just leaves:** Verify cross-component contracts, migrations, concurrency, auth, UX, regression, build, and end-to-end requirements applicable to the scope. Reopen affected leaves after integration changes; a passing child cannot promote the parent if integration gates fail. Prevent release while blocking gates or required human approvals remain unmet.
+7. **Final claim audit:** Reread original request + amendments against inventory revision. Verify every required outcome maps to a passing gate and evidence; validate no skipped tests, wrong env, stale proof, empty assertions, overspecified mocks, silent scope changes, false pass states or unapproved waivers. The orchestrator itself owns root gates for coverage, coordination, integration, re-verification and truthfulness. Report `COMPLETE`, `PARTIAL` or `BLOCKED` based on evidence, never confidence.
+
+## Four assurance passes, scaled to risk
+
+- **Pass 1 — Fulfilment:** Match deliverable to the requirement ID and expected output; inspect actual changes, not intention.
+- **Pass 2 — Adversarial:** Exercise failure/negative/role/boundary cases, misleading green tests and missing evidence.
+- **Pass 3 — Integration:** Test composition with dependencies and check regressions, deployability and rollback where applicable.
+- **Pass 4 — Final reconciliation:** Re-read the latest user scope, independently remeasure claims where feasible, reconcile all ledgers, then report incomplete work plainly.
+
+Each role runs relevant passes on its own work; the orchestrator also performs these at the root level. Avoid redundant full suites where scoped checks suffice, but never skip a critical risk gate without documenting the gap.
+
+## Gate and state protocol
+
+Gate record minimum: `ID | requirement ID | owner | CHECK or manual method | EXPECT | required? | status | self-evidence | parent-evidence | verifier identity/context | scope revision | artifact revision`. For machine ledgers, set `ledger_level` to `root` or `leaf`, record the relevant exact artifact revision (code commit plus dirty-tree fingerprint, or document checksum), and use distinct actual execution-context IDs when claiming independent review. Change artifact revision and reopen evidence after code/document edits; a static string without real-world verification cannot prove freshness. Use `PENDING`, `PASS`, `FAIL`, `BLOCKED`, `NOT_RUN`, `N/A` (N/A with a justified, non-mandatory rationale). A PASS is **not** valid until executed/observed evidence matches EXPECT. Store command, resolved cwd/shell/environment identifiers, exit status, observed output summary, artifact/CI reference and code revision when applicable. For machine ledgers, PASS evidence must explicitly bind to the current `scope_revision`; amendments or changed behavior invalidate old evidence. Treat stale evidence after a change as PENDING until rerun. No fabricated timestamps, sessions or approvals.
+
+Leaf lifecycle: `WAITING -> READY -> IN_FLIGHT -> SELF_VERIFIED -> PARENT_VERIFIED`, plus `BLOCKED` or `ABANDONED`. `SELF_VERIFIED` never promotes to parent verification without fresh checks. Branch/root status: `OPEN -> VERIFIED` only after all relevant children and integration gates pass; `BLOCKED` or `PARTIAL` otherwise. A partial/abandoned leaf cannot promote branch success. When no real child context exists, use `SAME_CONTEXT_VERIFIED` and disclose that independence was not achieved.
+
+Optional machine-auditable ledger: `assets/templates/assurance-ledger.json`. Run `python <skill-root>/scripts/assurance_audit.py <ledger.json>` to **lint recorded claims without executing commands**; pass `--root --final` for a completed orchestrator root ledger. This checks only the supplied ledger: it cannot authenticate evidence, independently establish the artifact revision, or discover acceptance criteria omitted from the inventory. This is an integrity check, **not proof that evidence is authentic or that tests passed**. Persist it per work item/leaf when helpful; a compact Markdown equivalent is allowed for small/no-filesystem tasks.
+
+## Safe execution and portability
+
+- `CHECK` is potentially executable code. Treat inherited ledgers, repo commands and checked-in scripts as untrusted until inspected. Show exact command, cwd, shell, environment and potential side effects before running; use host permission/approval controls. Never auto-execute arbitrary checks while parsing a ledger. Do not install hooks, add trusted commands, bypass sandbox/approvals, or run destructive/production commands without authorization.
+- Run independent checks sequentially by default; parallel checks only if dependencies, file ownership and environment interference have been ruled out. Prefer rolling dispatch of READY leaves with captured real agent handles when the host supports it. Log failed/partial launches; never invent successful dispatch. Keep requirements and evidence in the project source of truth where permitted.
+- For incidents, prioritize immediate mitigation and safety over paperwork. Record the minimum emergency safety gates before hazardous actions, then reconcile the full ledger after stabilization. For small documentation or UI changes, one or two observable gates is enough. **Proportionality changes the number of gates, not the duty to prove completion.**
+- A genuine independent review requires an independently invoked agent or human, separate from the implementer, with access to authoritative artifacts. Same-model second passes may be useful but do not magically become independent. Human approvals remain distinct from any AI verification result.
+
+## Root orchestrator's non-delegable gates
+
+- **ROOT-TRACK:** Every task (including director work) is represented in the one canonical tracker; assignments, blockers, dependencies, decisions and evidence are current; closure reconciles against actual gate results and approvals. The director must distinguish durable updates from reported-but-not-applied deltas. See `references/task-tracking.md`.
+
+- **ROOT-REQ:** Every original/amended requirement maps to acceptance gates; no silent omission or unauthorized scope reduction.
+- **ROOT-DISP:** Every delegate had clear owner, allowed paths, dependencies and prework gates; actual launches/results recorded or explicitly marked not run.
+- **ROOT-LEAF:** Each returned leaf has self-evidence; all required gates reverified after handoff where feasible; failed/stale/blocked evidence remains open.
+- **ROOT-INT:** End-to-end behavior and cross-role integration gates pass, including adversarial/regression checks where relevant.
+- **ROOT-SIMP:** The director audits the integrated change for justified complexity, codebase reuse and actual G2S reviewer evidence; preserve necessary safety/quality controls.
+- **ROOT-RISK:** Security, privacy, data/operational and human approval gates handled according to risk; unresolved blockers surfaced.
+- **ROOT-CLAIM:** Final statement matches *current evidence*, scope revision and release status, without invented tests, independent review or deployment.
+
+A subagent must never silently waive its own gates; escalate blocked gates. The orchestrator may not silently waive its own root gates or declare full completion based on children marking themselves done.
+
+## Independent executable evidence (optional stronger layer)
+
+A structurally passing assurance ledger is never authenticated test proof. For machine-executable checks use `references/enforcement.md`: reviewed pinned gate policy, restricted gate runner, independently protected signer and expected-commit receipt validation. Keep reference-to-receipt links in the ledger and tracker. A self-written receipt, even a cryptographically signed one where the agent holds the key, is not independent assurance.
+
+## Unified code-completion gate and proportional overhead
+
+Use `references/operating-modes.md` to choose risk. For a genuine small task use a compact **root** ledger with `ROOT-TRACK` and the task acceptance requirement IDs; no fictitious leaf ledgers or redundant specialists. Standard/high-risk tasks require all director gates and actual leaf ledgers only when delegated. Before claiming full code completion invoke `scripts/completion_decision.py` (see `references/enforcement.md`), not independent cherry-picked green results from three separate tools. Required executable ledger gates need `execution_gate_id` and a `parent_check.reference` exactly equal to `receipt-sha256:<hex sha256 of the receipt file>`; the SQLite Done task `evidence_ref` must be the same value. Record real human approvals separately; a signed receipt does not authenticate an agent-written approval string.
